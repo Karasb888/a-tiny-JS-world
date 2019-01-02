@@ -7,71 +7,75 @@
 
 // ======== OBJECTS DEFINITIONS ========
 
-var Inhabits = function (species, name, gender, legs, hands, saying) {
-  this.species = species;
-  this.name = name;
-  this.gender = gender;
-  this.legs = legs;
+var Inhabit = function(livingArea, aggressiveTo, peacefulTo, neutralTo, hands, legs, saying ) {
+  this.livingArea = livingArea;
+  this.aggressiveTo = aggressiveTo;
+  this.peacefulTo = peacefulTo;
+  this.neutralTo = neutralTo;
   this.hands = hands;
-  this.saying = saying;
+  this.legs = legs;
+  if(this.saying !== null){
+    this.saying = saying;
+  }
 };
 
-Inhabits.prototype.output = function() {
+Inhabit.prototype.output = function() {
   let message = '';
   for(key in this){
-
     if(key !== 'output'){
-     message += this[key] + ' ';
+      message += `<b>${key}</b> : <i>${this[key]}</i> `;
     }
-
   }
   return message;
-
 };
-var dog = new Inhabits('dog', 'Tommy', 'male', 4, 0, 'uf-uf');
-var human = new Inhabits('human', 'Ivan', 'male', 2, 2, 'kek kek');
-var robot = new Inhabits('robot', 'IO-42', 'none', 2, 2, 'kill all humans');
-var cat = new Inhabits('cat', 'Kitty', 'female', 4, 0, 'meow-meow');
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+var Human = function(name, age, saying){
+  Inhabit.call(this, 'earth', 'humans, mutans, cyborgs', 'cats and dogs', 'robots', 2, 2);
+  this.name = name;
+  this.age = age;
+  this.saying = saying;
 }
+Human.prototype = Object.create(Inhabit.prototype);
 
-var Mutant = function(species, first, second){
-  var params = [];
-  for(key in first){
-  let random = getRandomInt(1, 4);
-
-  switch (random){
-    case 1:
-    typeof first[key] === 'number' ? params.push(first[key] + second[key]) : params.push(first[key] + ' - ' + second[key]);
-    break;
-
-    case 2:
-    params.push(first[key]);
-    break;
-
-    case 3:
-    params.push(second[key]);
-    break;
-
-  }
+var Cat = function(name, age){
+  Inhabit.call(this, 'earth', 'dogs, mutans, robots', 'cats', 'humans', 0, 4, 'meow-meow');
+  this.name = name;
+  this.age = age;
 }
-  Inhabits.apply(this, params);
-  this.saying = `${first.saying} ${second.saying} I AM ALIIIIIVEEEEEEE` ;
+Cat.prototype = Object.create(Inhabit.prototype);
+
+var Dog = function(name, age){
+  Inhabit.call(this, 'earth', 'mutans, cats', 'humans, robots', 'dogs', 0, 4, 'uf-uf');
+  this.name = name;
+  this.age = age;
 }
+Dog.prototype = Object.create(Inhabit.prototype);
 
-Mutant.prototype = Inhabits.prototype;
+var Robot = function(name, age){
+  Inhabit.call(this, 'Earth and space', 'none', 'none', 'all', 2, 2, 'pew-pew-pew');
+  this.name = name;
+  this.age = age;
+}
+Robot.prototype = Object.create(Inhabit.prototype);
 
-var cyborg = new Mutant('cyborg', human, robot);
-var catHuman = new Mutant('cat-women', cat, human);
-var dogRobot = new Mutant('dogRobot', dog, robot);
+var Mutant = function(firstInhabit, secondInhabit){
+  Inhabit.call(this, 'earth and water', 'all', 'none', 'mutants');
+  this.name = firstInhabit.age + secondInhabit.age;
+  this.age = Math.max(firstInhabit.age,secondInhabit.age);
+  this.hands = firstInhabit.hands + secondInhabit.hands;
+  this.legs = firstInhabit.legs + secondInhabit.legs;
+  this.saying = `${firstInhabit.saying}  ${secondInhabit.saying} 'I am ALIVE!'`;
+}
+Mutant.prototype = Object.create(Inhabit.prototype);
 
-// ======== OUTPUT ========
-print(dog.output(), 'div');
-print(cat.output(), 'div');
+var human = new Human('Ivan', 22, 'Hello world');
+var dog = new Dog('Joe', 6);
+var cat = new Cat('Kitty', 5);
+var robot = new Robot('Io-22', 150);
+var mutant = new Mutant(human, dog);
+
 print(human.output(), 'div');
+print(dog.output(), 'div');
 print(robot.output(), 'div');
-print(cyborg.output(), 'div');
-print(catHuman.output(), 'div');
-print(dogRobot.output(), 'div');
+print(cat.output(), 'div');
+print(mutant.output(), 'div');
